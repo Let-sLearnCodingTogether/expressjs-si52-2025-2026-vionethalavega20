@@ -1,5 +1,5 @@
 import express from "express"
-import* as profileController from "../contoller/profileController.js"
+import * as profileController from "../controller/profileController.js"
 
 const web = express.Router()
 
@@ -9,5 +9,3 @@ web.get('/', (req, res) => {
 web.get('/:username', profileController.publicProfile)
 
 export default web
-
-
