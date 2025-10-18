@@ -1,71 +1,68 @@
 import UserModel from "../models/userModel.js";
-import { hash } from "../utils/hashUtil.js";
+import { hash, compare } from "../utils/hashUtil.js";
+import { jwtSignUtil } from "../utils/jwtSignUtil.js";
 
-export const register = async(req,res)=>{
-    try{
-
-        // untuk mengambil data
-        const registerData = requestAnimationFrame.body
-
+export const register = async (req, res) => {
+    try {
+        const registerData = req.body;
         console.log(registerData);
 
-        const hashPassword = hash(registerData.password)
+        const hashPassword = hash(registerData.password);
 
         await UserModel.create({
             username: registerData.username,
             email: registerData.email,
-            password: hashPassword
-        })
-
+            password: hashPassword,
+        });
+        
         res.status(201).json({
-            message : "Berhasil register, silakan login",
-            date : null
-    })
-
-        }catch(e){
+            message: "Berhasil register, silahkan Login",
+            data: null
+        })
+    } catch(e) {
         res.status(500).json({
-            message : e.message,
-            date : null
+            message: e.message,
+            data: null
         })
     }
 }
 
-export const login = async(req,res)=>{
-    try{
-        const loginData = req.body
-
-        // Mencari user berdasarkan email
+export const login = async (req, res) => {
+    try {
+        const loginData = req.body;
         const user = await UserModel.findOne({
-            email : loginData.email,
-        })
+            email: loginData.email});
 
-        if(!user){
+        if(!user) {
             return res.status(404).json({
-                message : "User tidak ditemukan",
-                data : null
+                message: "Email atau password salah",
+                data: null
             })
         }
-
-        // Membandingkan passsword yg ada didalam db dgn request
-        if(user.password == loginData.password){
-            return res.status(200).json({
-                message : "Login berhasil",
-                data : {
-                    username : user.username,
-                    email : user.email,
-                    token : "TOKEN"
-                }
-            })
-        }
+    
+        if(compare(loginData.password, user.password)) {
+        return res.status(200).json({
+            message: "Login Berhasil",
+            data: {
+                username: user.username,
+                email: user.email,
+                token: jwtSignUtil(user)
+            }
+        })
+    }
         return res.status(401).json({
-            message : "Login gagal",
-            data : null
-        })
+        message: "login failed",
+        data: {
+            username: user.username,
+            email: user.email
+        }
+    })
 
-    }catch(error){
+
+    } catch (error) {
         res.status(500).json({
-            message : error,
-            data : null
-        })
+            message: e.message,
+            data: null
+        });
     }
 }

@@ -1,29 +1,29 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
-{
-    username : {
-        type : String,
-        required : [true, "Username wajib diisi"],
-        unique : true, // disesuaikan dengan nama
-        trim : true // menghapus spasi di depan dan belakang
-    },
-    email: {
-        type : String,
-        required : [true, "Email wajib diisi"],
-        unique : true,
-        trim : true
-    },
-    password : {
-        type : String,
-        required : [true, "Password wajib diisi"]
-    }
-},
     {
-        timestamps : true
+        username: {
+            type: String,
+            required: [true, "Username wajb di isi"],
+            unique: true,
+            trim: true
+        },
+        email: {
+            type: String,
+            required: [true, "Email wajb di isi"],
+            unique: true,
+            trim: true
+        },
+        password: {
+            type: String,
+            required: [true, "Password wajb di isi"]
+        }
+    },
+    {
+        timestamps: true
     }
 )
 
 const UserModel = mongoose.model("User", UserSchema)
 
-export default UserModel
+export default UserModel;
