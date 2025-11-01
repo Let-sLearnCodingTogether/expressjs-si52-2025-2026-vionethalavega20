@@ -10,6 +10,6 @@ export const database = async()=>{
     } catch (error){
         console.log("Mongodb connection failed");
 
-        process.exit(1)
+        process.exit (1)
     }
 }
